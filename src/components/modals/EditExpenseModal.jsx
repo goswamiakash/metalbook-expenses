@@ -44,7 +44,7 @@ export default function EditExpenseModal({ item, onClose }) {
         {errors.amount && <div style={{color:"var(--accent-2)"}}>{errors.amount}</div>}
 
         <label>Category</label>
-        <select name="category" value={form.category} onChange={onChange} style={{ width:"100%", padding:8, marginTop:8, borderRadius:6, background:"transparent", border:"1px solid rgba(255,255,255,0.04)", color:"var(--text)" }}>
+        <select name="category" value={form.category} onChange={onChange} style={{ width:"100%", padding:8, marginTop:8, borderRadius:6, background:"transparent", border:"1px solid rgba(255,255,255,0.04)"}}>
           {["Food","Transport","Entertainment","Bills","Shopping","Other"].map(c=> <option key={c} value={c}>{c}</option>)}
         </select>
 
