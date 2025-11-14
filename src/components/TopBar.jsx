@@ -13,13 +13,11 @@ const Bar = styled.div`
 `;
 
 const Title = styled.div`font-weight:700; color:var(--text); font-size:18px;`;
-const Right = styled.div`color:var(--muted); font-size:13px;`;
 
 export default function TopBar(){
   return (
     <Bar>
       <Title>Expense Tracker</Title>
-      <Right>Dashboard</Right>
     </Bar>
   );
 }

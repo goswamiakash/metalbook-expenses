@@ -7,25 +7,35 @@ import ExpenseRow from "./ExpenseRow";
 
 const Card = styled.div`
   background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-  padding:14px;
-  border-radius:10px;
-  border:1px solid rgba(255,255,255,0.04);
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.04);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden; /* Prevent mobile overflow */
 `;
 
 const Controls = styled.div`
-  display:flex;
-  gap:8px;
-  align-items:center;
-  margin-bottom:12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 12px;
+  flex-wrap: wrap;     /* ✅ Wrap inputs on small screens */
 `;
 
 const Input = styled.input`
-  background:var(--glass);
-  border:1px solid rgba(255,255,255,0.03);
-  color:var(--text);
-  padding:8px;
-  border-radius:8px;
-  outline:none;
+  background: var(--glass);
+  border: 1px solid rgba(255,255,255,0.03);
+  color: var(--text);
+  padding: 8px;
+  border-radius: 8px;
+  outline: none;
+  min-width: 0;        /* ✅ Prevent flex overflow */
+  flex: 1;             /* Let each input shrink properly */
+
+  @media (max-width: 480px) {
+    width: 100%;       /* Force full-width stacking on small screens */
+  }
 `;
 
 export default function ExpenseList({ items = [], query, setQuery, from, to, setFrom, setTo }) {
@@ -36,7 +46,11 @@ export default function ExpenseList({ items = [], query, setQuery, from, to, set
     const q = String(localQuery || "").trim().toLowerCase();
     if (q) {
       const num = Number(q);
-      list = list.filter(it => it.name.toLowerCase().includes(q) || String(it.amount).includes(q) || (!isNaN(num) && Number(it.amount) === num));
+      list = list.filter(it =>
+        it.name.toLowerCase().includes(q) ||
+        String(it.amount).includes(q) ||
+        (!isNaN(num) && Number(it.amount) === num)
+      );
     }
     if (from || to) {
       const start = from ? parseISO(from) : null;
@@ -63,17 +77,24 @@ export default function ExpenseList({ items = [], query, setQuery, from, to, set
       </div>
 
       <Controls>
-        <Input placeholder="Search by name or amount" value={localQuery} onChange={(e)=>setLocalQuery(e.target.value)} onKeyUp={()=>setQuery(localQuery)} style={{flex:1}} />
+        <Input
+          placeholder="Search by name or amount"
+          value={localQuery}
+          onChange={(e)=>setLocalQuery(e.target.value)}
+          onKeyUp={()=>setQuery(localQuery)}
+        />
+
+        {/* Date inputs */}
         <Input type="date" value={from} onChange={(e)=>setFrom(e.target.value)} />
         <Input type="date" value={to} onChange={(e)=>setTo(e.target.value)} />
       </Controls>
 
-      <div style={{ display:"grid", gap:8 }}>
+      <div style={{ display: "grid", gap: 8 }}>
         {pageItems.length === 0 && <div style={{ color:"var(--muted)" }}>No transactions found</div>}
         {pageItems.map(it => <ExpenseRow key={it.id} item={it} />)}
       </div>
 
-      <div style={{ marginTop:12 }}>
+      <div style={{ marginTop: 12 }}>
         <Pagination pager={pager} />
       </div>
     </Card>

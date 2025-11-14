@@ -10,8 +10,8 @@ import SummaryCard from "./components/Summary";
 
 const Shell = styled.div`
   max-width:1100px;
-  margin:20px auto;
-  padding:20px;
+  margin: auto;
+  padding:10px;
 `;
 
 const Grid = styled.div`
