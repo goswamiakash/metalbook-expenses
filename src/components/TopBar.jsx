@@ -8,7 +8,7 @@ const Bar = styled.div`
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:20px;
+  margin-bottom:10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.4);
 `;
 

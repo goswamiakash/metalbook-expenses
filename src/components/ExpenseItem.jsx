@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { deleteExpense, updateExpense } from "../features/expenses/expensesSlice";
+import { deleteExpense} from "../features/expenses/expensesSlice";
 import ExpenseForm from "./ExpenseForm";
 import { format, parseISO } from "date-fns";
 import confirm from "sweetalert2";

@@ -6,13 +6,17 @@ import Pagination from "./Pagination";
 import ExpenseRow from "./ExpenseRow";
 
 const Card = styled.div`
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(255, 255, 255, 0.01)
+  );
   padding: 14px;
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.04);
+  border: 1px solid rgba(255, 255, 255, 0.04);
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden; /* Prevent mobile overflow */
+  overflow-x: hidden; 
 `;
 
 const Controls = styled.div`
@@ -20,42 +24,71 @@ const Controls = styled.div`
   gap: 8px;
   align-items: center;
   margin-bottom: 12px;
-  flex-wrap: wrap;     /* ✅ Wrap inputs on small screens */
+  flex-wrap: wrap; 
 `;
 
 const Input = styled.input`
   background: var(--glass);
-  border: 1px solid rgba(255,255,255,0.03);
+  border: 1px solid rgba(255, 255, 255, 0.03);
   color: var(--text);
   padding: 8px;
   border-radius: 8px;
   outline: none;
-  min-width: 0;        /* ✅ Prevent flex overflow */
-  flex: 1;             /* Let each input shrink properly */
+  min-width: 0;
+  flex: 1; 
 
   @media (max-width: 480px) {
-    width: 100%;       /* Force full-width stacking on small screens */
+    width: 100%; 
   }
 `;
 
-export default function ExpenseList({ items = [], query, setQuery, from, to, setFrom, setTo }) {
+const TitleRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  min-width: 0; 
+  overflow: hidden; 
+
+  h3 {
+    margin: 0; 
+    padding: 0;
+    font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+  }
+`;
+
+export default function ExpenseList({
+  items = [],
+  query,
+  setQuery,
+  from,
+  to,
+  setFrom,
+  setTo,
+}) {
   const [localQuery, setLocalQuery] = useState(query || "");
 
   const filtered = useMemo(() => {
     let list = items;
-    const q = String(localQuery || "").trim().toLowerCase();
+    const q = String(localQuery || "")
+      .trim()
+      .toLowerCase();
     if (q) {
       const num = Number(q);
-      list = list.filter(it =>
-        it.name.toLowerCase().includes(q) ||
-        String(it.amount).includes(q) ||
-        (!isNaN(num) && Number(it.amount) === num)
+      list = list.filter(
+        (it) =>
+          it.name.toLowerCase().includes(q) ||
+          String(it.amount).includes(q) ||
+          (!isNaN(num) && Number(it.amount) === num)
       );
     }
     if (from || to) {
       const start = from ? parseISO(from) : null;
       const end = to ? parseISO(to) : null;
-      list = list.filter(it => {
+      list = list.filter((it) => {
         const d = parseISO(it.date);
         if (start && end) return isWithinInterval(d, { start, end });
         if (start) return d >= start;
@@ -71,27 +104,37 @@ export default function ExpenseList({ items = [], query, setQuery, from, to, set
 
   return (
     <Card>
-      <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-        <h3 style={{ margin:0 }}>Recent Transactions</h3>
-        <div style={{ color:"var(--muted)", fontSize:13 }}>{filtered.length} items</div>
-      </div>
+      <TitleRow>
+        <h3>Recent Transactions</h3>
+        <div style={{ color: "var(--muted)", fontSize: 13 }}>
+          {filtered.length} items
+        </div>
+      </TitleRow>
 
       <Controls>
         <Input
           placeholder="Search by name or amount"
           value={localQuery}
-          onChange={(e)=>setLocalQuery(e.target.value)}
-          onKeyUp={()=>setQuery(localQuery)}
+          onChange={(e) => setLocalQuery(e.target.value)}
+          onKeyUp={() => setQuery(localQuery)}
         />
 
         {/* Date inputs */}
-        <Input type="date" value={from} onChange={(e)=>setFrom(e.target.value)} />
-        <Input type="date" value={to} onChange={(e)=>setTo(e.target.value)} />
+        <Input
+          type="date"
+          value={from}
+          onChange={(e) => setFrom(e.target.value)}
+        />
+        <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
       </Controls>
 
       <div style={{ display: "grid", gap: 8 }}>
-        {pageItems.length === 0 && <div style={{ color:"var(--muted)" }}>No transactions found</div>}
-        {pageItems.map(it => <ExpenseRow key={it.id} item={it} />)}
+        {pageItems.length === 0 && (
+          <div style={{ color: "var(--muted)" }}>No transactions found</div>
+        )}
+        {pageItems.map((it) => (
+          <ExpenseRow key={it.id} item={it} />
+        ))}
       </div>
 
       <div style={{ marginTop: 12 }}>

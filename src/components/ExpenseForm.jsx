@@ -47,8 +47,6 @@ const Button = styled.button`
 const categories = ["Food", "Transport", "Entertainment", "Bills", "Shopping", "Other"];
 
 export default function ExpenseForm({ edit = null, onDone }) {
-  // if edit passed in, we can prefill (component supports both add and edit)
-  // note: parent in this implementation calls ExpenseForm without edit normally; update path kept flexible
   const dispatch = useDispatch();
 
   const [form, setForm] = useState({
@@ -91,13 +89,11 @@ export default function ExpenseForm({ edit = null, onDone }) {
     }
     setErrors({});
     if (form.id) {
-      // update
       dispatch(updateExpense({ id: form.id, ...payload }));
       if (onDone) onDone();
     } else {
       dispatch(addExpense(payload));
     }
-    // clear form after add
     setForm({
       name: "",
       amount: "",
